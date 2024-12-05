@@ -1,0 +1,40 @@
+import threading
+import time
+
+def write_words(word_count, file_name):
+     with open(file_name, 'w+', encoding='utf-8') as f:
+        for i in range(1,word_count+1):
+            f.write(f'Какое-то слово № {i}\n')
+            time.sleep(0.1)
+     print(f'Завершилась запись в файл {file_name}')
+
+def seconds_to_str(seconds: int) -> str:
+    hh, mm = divmod(seconds, 3600)
+    mm, ss = divmod(mm, 60)
+    return "%02d:%02d:%02d" % (hh, mm, ss)
+
+start_time = time.time()
+write_words(10, 'example1.txt')
+write_words(30, 'example2.txt')
+write_words(200, 'example3.txt')
+write_words(100, 'example4.txt')
+end_time = time.time()
+elapsed_time = end_time - start_time
+print(f'Работа потоков {seconds_to_str(elapsed_time)}')
+
+start_time = time.time()
+p1=threading.Thread(target=write_words, args=(10, 'example5.txt'))
+p2=threading.Thread(target=write_words, args=(30, 'example6.txt'))
+p3=threading.Thread(target=write_words, args=(200, 'example7.txt'))
+p4=threading.Thread(target=write_words, args=(100, 'example8.txt'))
+p1.start()
+p2.start()
+p3.start()
+p4.start()
+p1.join()
+p2.join()
+p3.join()
+p4.join()
+end_time = time.time()
+elapsed_time = end_time - start_time
+print(f'Работа потоков {elapsed_time}')
